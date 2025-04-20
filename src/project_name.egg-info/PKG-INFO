@@ -1,0 +1,9 @@
+Metadata-Version: 2.2
+Name: project_name
+Version: 0.1.0
+Summary: MLOps project template
+Author: Your Name
+Requires-Python: >=3.8
+Dynamic: author
+Dynamic: requires-python
+Dynamic: summary
