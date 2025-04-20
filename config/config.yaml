@@ -1,0 +1,16 @@
+artifact_root: artifact
+
+data_ingestion:
+  source_url: https://github.com/entbappy/Branching-tutorial/raw/master/Chicken-fecal-images.zip
+  root_dir: artifact/dataset
+  zip_data_file: artifact/dataset/data.zip
+  unzip_data_file: artifact/dataset/
+
+data_preprossecing:
+  root_dir: artifact/dataset
+  raw_data_file: artifact/dataset/
+  processed_data: artifact/dataset/
+
+prepare_model:
+  root_dir: artifact/model
+  

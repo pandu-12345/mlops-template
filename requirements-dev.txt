@@ -1,3 +1,7 @@
 pandas
-tensorflow
--e .
+flake8    #for code formatting
+joblib
+notebook
+python-box
+pyyaml
+types-pyyaml
