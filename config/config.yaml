@@ -6,11 +6,20 @@ data_ingestion:
   zip_data_file: artifact/dataset/data.zip
   unzip_data_file: artifact/dataset/
 
-data_preprossecing:
+data_transformation:
   root_dir: artifact/dataset
-  raw_data_file: artifact/dataset/
-  processed_data: artifact/dataset/
+  data_type: image
+  transformed_data_file: artifact/dataset/transformed
+  image_size: [224,224]
+  unzip_data_file: artifact/dataset/
 
-prepare_model:
-  root_dir: artifact/model
+
+
+model_training:
+  model_dir: artifact/model
+  data_dir: artifact/dataset/transformed
+
+model_evaluation:
+  model_dir: artifact/model
+  data_dir: artifact/dataset/transformed 
   

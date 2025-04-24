@@ -5,3 +5,9 @@ notebook
 python-box
 pyyaml
 types-pyyaml
+pillow
+torch 
+torchvision 
+torchaudio
+mlflow
+fastapi

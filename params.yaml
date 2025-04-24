@@ -1,1 +1,5 @@
-root: root
+epochs: 1
+image_size: [224,224]
+learning_rate: 0.001
+batch_size: 30
+num_classes: 2
