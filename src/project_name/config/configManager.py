@@ -55,6 +55,7 @@ class ConfigManager:
             model_path= config.model_dir,
             test_data_path= config.data_dir,
             image_size= self.params.image_size,
-            batch_size= self.params.batch_size
+            batch_size= self.params.batch_size,
+            result= config.result
         )
         return entity

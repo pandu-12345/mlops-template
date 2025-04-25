@@ -13,3 +13,4 @@ mlflow
 fastapi
 uvicorn
 #apache-airflow
+dvc

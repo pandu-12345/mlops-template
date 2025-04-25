@@ -10,7 +10,8 @@ class DataTransformationPipeline:
         pass
 
     def main(self):
-        datatransformationentity = ConfigManager.get_data_transformation_entity()
+        configManager= ConfigManager()
+        datatransformationentity = configManager.get_data_transformation_entity()
         datatransformation= DataTransformation(datatransformationentity)
         datatransformation.transform()
 

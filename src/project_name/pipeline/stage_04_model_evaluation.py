@@ -9,7 +9,8 @@ class ModelEvaluationPipeline:
         pass
 
     def main(self):
-        modelevaluationentity= ConfigManager.get_evaluation_entity()
+        configManager = ConfigManager()
+        modelevaluationentity= configManager.get_evaluation_entity()
         modelevaluation= ModelEvaluation(modelevaluationentity)
         modelevaluation.evaluate()
 

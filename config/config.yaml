@@ -22,4 +22,5 @@ model_training:
 model_evaluation:
   model_dir: artifact/model
   data_dir: artifact/dataset/transformed 
+  result: matrics
   

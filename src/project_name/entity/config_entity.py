@@ -35,3 +35,4 @@ class modelevaluationentity:
     test_data_path: Path
     image_size: tuple
     batch_size: int
+    result: Path

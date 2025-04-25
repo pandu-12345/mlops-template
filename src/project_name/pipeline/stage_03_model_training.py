@@ -11,7 +11,8 @@ class ModelTrainingPipeline:
         pass
 
     def main(self):
-        modeltrainingentity= ConfigManager.get_training_entity()
+        configManager = ConfigManager()
+        modeltrainingentity= configManager.get_training_entity()
         component = ModelTraining(modeltrainingentity)
         component.train()
 

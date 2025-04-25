@@ -1,0 +1,67 @@
+schema: '2.0'
+stages:
+  dataingestion:
+    cmd: python -m project_name.pipeline.stage_01_dataingestion
+    deps:
+    - path: src/project_name/pipeline/stage_01_dataingestion.py
+      hash: md5
+      md5: 2956a9bd394d5689b1c1b13ebad8c3e2
+      size: 707
+    outs:
+    - path: artifact/dataset/Chicken-fecal-images
+      hash: md5
+      md5: 9e1f8dd2eae3c29e9d635df89d438ae4.dir
+      size: 12207807
+      nfiles: 390
+  datatransformation:
+    cmd: python -m project_name.pipeline.stage_02_datatransformation
+    deps:
+    - path: artifact/dataset/Chicken-fecal-images
+      hash: md5
+      md5: 9e1f8dd2eae3c29e9d635df89d438ae4.dir
+      size: 12207807
+      nfiles: 390
+    - path: src/project_name/pipeline/stage_02_datatransformation.py
+      hash: md5
+      md5: c4b7e7eda28d7f1fabb3b81f8fd1186e
+      size: 701
+    outs:
+    - path: artifact/dataset/transformed
+      hash: md5
+      md5: c462ed2a4fce43ba45d8d67ed907361d.dir
+      size: 3663238
+      nfiles: 390
+  modeltraining:
+    cmd: python -m project_name.pipeline.stage_03_model_training
+    deps:
+    - path: artifact/dataset/transformed
+      hash: md5
+      md5: c462ed2a4fce43ba45d8d67ed907361d.dir
+      size: 3663238
+      nfiles: 390
+    - path: src/project_name/pipeline/stage_03_model_training.py
+      hash: md5
+      md5: c9a6f6424d8508b3cea2724cd9f85ec6
+      size: 622
+    outs:
+    - path: artifact/model
+      hash: md5
+      md5: de6370070a5abeabab12448db810c449
+      size: 44780939
+  modelevaluation:
+    cmd: python -m project_name.pipeline.stage_04_model_evaluation
+    deps:
+    - path: artifact/model
+      hash: md5
+      md5: de6370070a5abeabab12448db810c449
+      size: 44780939
+    - path: src/project_name/pipeline/stage_04_model_evaluation.py
+      hash: md5
+      md5: fbb0d5b68eeef308743d82d00a584fea
+      size: 649
+    outs:
+    - path: matrics
+      hash: md5
+      md5: 2b38caa5ae12386989545be79b49886b.dir
+      size: 880
+      nfiles: 1

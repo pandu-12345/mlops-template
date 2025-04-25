@@ -173,5 +173,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-mlruns
-artifact
+mlruns/
+artifact/
+/matrics
+.flake8

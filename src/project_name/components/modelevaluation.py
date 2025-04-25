@@ -2,8 +2,11 @@ from sklearn.metrics import accuracy_score, classification_report
 import mlflow
 from ..entity.config_entity import modelevaluationentity
 import torch
+from pathlib import Path
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+import mlflow.pytorch
+import json
 
 class ModelEvaluation:
     def __init__(self, entity:modelevaluationentity):
@@ -12,7 +15,8 @@ class ModelEvaluation:
 
     def evaluate(self):
    
-        model = torch.load(self.entity.model_path, map_location=self.device)
+        model = mlflow.pytorch.load_model("models:/MLOPs Template/1")  # Version 1
+        model.to(self.device)
         model.eval()
 
         
@@ -39,3 +43,14 @@ class ModelEvaluation:
 
         mlflow.log_metric("accuracy", acc)
         mlflow.log_dict(report, "classification_report.json")
+        metrics = {
+            'accuracy': acc,
+            'report' : report
+        }
+        file = "evaluation_score.json"
+        path= Path(self.entity.result)
+        
+        path.mkdir(parents=True,exist_ok=True)
+        full_path= path/file
+        with open(full_path,'w') as f:
+            json.dump(metrics, f, indent=4)

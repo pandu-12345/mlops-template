@@ -1,0 +1,32 @@
+stages:
+  dataingestion:
+    cmd: python -m project_name.pipeline.stage_01_dataingestion
+    deps: 
+      - src/project_name/pipeline/stage_01_dataingestion.py
+    outs: 
+      - artifact/dataset/Chicken-fecal-images
+      
+
+  datatransformation:
+    cmd: python -m project_name.pipeline.stage_02_datatransformation
+    deps:
+      - src/project_name/pipeline/stage_02_datatransformation.py
+      - artifact/dataset/Chicken-fecal-images
+    outs:
+      - artifact/dataset/transformed
+
+  modeltraining:
+    cmd: python -m project_name.pipeline.stage_03_model_training
+    deps: 
+      - src/project_name/pipeline/stage_03_model_training.py
+      - artifact/dataset/transformed
+    outs:
+      - artifact/model
+
+  modelevaluation:
+    cmd: python -m project_name.pipeline.stage_04_model_evaluation
+    deps: 
+      - src/project_name/pipeline/stage_04_model_evaluation.py
+      - artifact/model
+    outs:
+     - matrics
