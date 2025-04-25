@@ -20,23 +20,6 @@ This template is ideal for **image classification problems**, but it's modular e
 
 ---
 
-## 📂 Project Structure
-
-```
-.
-├── src/                    # Source code (pip installable)
-│   └── project_name/       # ML pipeline modules
-├── config/                 # YAML configs for pipeline stages
-├── artifacts/              # Generated pipeline outputs
-├── data/                   # Data managed via DVC
-├── Dockerfile              # For containerization
-├── dvc.yaml                # DVC pipeline definition
-├── .github/workflows/      # GitHub Actions for CI/CD
-├── requirements.txt
-└── README.md
-```
-
----
 
 ## ⚙️ Key Features
 
@@ -124,4 +107,3 @@ Set the following in your GitHub repository settings:
 ## 📜 License
 
 MIT License
-```
