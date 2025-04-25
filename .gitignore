@@ -177,3 +177,22 @@ mlruns/
 artifact/
 /matrics
 .flake8
+
+# VS Code
+.vscode/
+
+# Docker
+*.tar
+*.img
+docker-compose.override.yml
+
+# FastAPI
+__pycache__/
+instance/
+*.db
+
+# Build
+dist/
+build/
+*.egg-info/
+*.spec
