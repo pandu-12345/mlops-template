@@ -64,7 +64,7 @@ class ModelTraining:
 
             print(f"Epoch {epoch+1}/{self.entity.epochs}, Loss: {total_loss:.4f}")
         input_example = torch.rand(1, 3, 224, 224).to(device).cpu().numpy()
-        mlflow.pytorch.log_model(model, artifact_path="model",input_example= input_example)
+        mlflow.pytorch.log_model(model, artifact_path="model",input_example= input_example,registered_model_name="MLOPs Template")
         
         class_to_idx = dataset.class_to_idx
         mlflow.log_dict(class_to_idx, "class_to_idx.json")

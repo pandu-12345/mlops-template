@@ -5,3 +5,7 @@ from .components.dataIngestion import DataIngestion
 from .components.datatransformation import DataTransformation
 from .components.modeltraining import ModelTraining
 from .components.modelevaluation import ModelEvaluation
+from .pipeline.stage_01_dataingestion import DataIngestionPipeline
+from .pipeline.stage_02_datatransformation import DataTransformationPipeline
+from .pipeline.stage_03_model_training import ModelTrainingPipeline
+from .pipeline.stage_04_model_evaluation import ModelEvaluationPipeline

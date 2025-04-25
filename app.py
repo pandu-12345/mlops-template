@@ -5,6 +5,8 @@ import mlflow.pytorch
 from PIL import Image
 import io
 import torch
+import mlflow
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
 
 app = FastAPI()
 
@@ -20,7 +22,7 @@ transform = transforms.Compose([
 def home():
     return "its home page" 
 
-@app.get("/predict")
+@app.post("/predict")
 async def predictImage(file: UploadFile = File(...)):
 
     content= await file.read()

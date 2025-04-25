@@ -1,9 +1,11 @@
+
+from project_name import DataIngestionPipeline
+"""""
 from project_name import ConfigManager
 from project_name import DataIngestion
 from project_name import DataTransformation
 from project_name import ModelTraining
 from project_name import ModelEvaluation
-
 configManager = ConfigManager()
 dataingestion_entity = configManager.get_dataingestion_entity()
 dataIngestioncomponent = DataIngestion(dataingestion_entity)
@@ -20,4 +22,6 @@ component.train()
 
 modelevaluationentity= configManager.get_evaluation_entity()
 modelevaluation= ModelEvaluation(modelevaluationentity)
-modelevaluation.evaluate()
+modelevaluation.evaluate()"""
+obj = DataIngestionPipeline()
+obj.main()
