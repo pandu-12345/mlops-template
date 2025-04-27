@@ -1,5 +1,5 @@
 
-```markdown
+
 # MLOps Template (PyTorch + DVC + MLflow + CI/CD)
 
 A robust, production-ready MLOps pipeline designed for scalable image classification tasks using PyTorch. This project demonstrates the application of modern MLOps practices—like reproducibility, automation, monitoring, and containerization—to streamline the end-to-end machine learning workflow.
