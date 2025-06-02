@@ -8,7 +8,7 @@ files_path = [
     "Readme.md",
     "setup.py",
     "config/config.yaml",
-    "params.yaml",
+    "params/params.yaml",
     f"src/{main}/components/__init__.py",
     "requirements.txt",
     "requirements-dev.txt",
