@@ -57,8 +57,9 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AZURE_VM_IP }}
-        username: ${{ secrets.AZURE_VM_USER }}
+        username: sudarshanuser
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        port: 22
         script: |
           cd ~/mlops
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
@@ -81,8 +82,9 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.AZURE_VM_IP }}
-        username: ${{ secrets.AZURE_VM_USER }}
+        username: sudarshanuser
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        port: 22
         script: |
           cd ~/mlops
           docker-compose pull
