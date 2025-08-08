@@ -40,7 +40,18 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: 22
         script: |
-          echo "connecting to azure"
+          docker pull $REGISTRY/mlflow:$IMAGE_TAG
+          docker stop mlflow || true
+          docker rm mlflow || true
+          docker run -d \
+            --name mlflow \
+            -p 5000:5000 \
+            -v ~/mlruns:/mlruns \
+            -v ~/mlflow.db:/mlflow.db \
+            -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
+            -e MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlruns \
+            $REGISTRY/mlflow:$IMAGE_TAG
+
 
     - name: Run DVC Repro
       uses: appleboy/ssh-action@master
