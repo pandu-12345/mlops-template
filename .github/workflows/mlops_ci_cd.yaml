@@ -40,9 +40,7 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: 22
         script: |
-          if [ -z "$REGISTRY" ]; then export REGISTRY=ghcr.io/pandu-12345; fi
-          if [ -z "$IMAGE_TAG" ]; then export IMAGE_TAG=latest; fi
-          docker pull $REGISTRY/mlops-template:$IMAGE_TAG
+          docker pull $REGISTRY/mlflow:$IMAGE_TAG
           docker stop mlflow || true
           docker rm mlflow || true
           docker run -d \
@@ -52,7 +50,7 @@ jobs:
             -v $HOME/mlflow.db:/mlflow.db \
             -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
             -e MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlruns \
-            $REGISTRY/mlops-template:$IMAGE_TAG
+            $REGISTRY/mlflow:$IMAGE_TAG
       
 
 
