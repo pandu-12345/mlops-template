@@ -61,6 +61,7 @@ jobs:
         script: |
           cd ~/mlops
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
+          pip install -r requirements.txt
           dvc repro
 
 
