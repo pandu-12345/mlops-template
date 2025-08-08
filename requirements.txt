@@ -1,5 +1,4 @@
 pandas
-flake8    #for code formatting
 joblib
 notebook
 python-box
