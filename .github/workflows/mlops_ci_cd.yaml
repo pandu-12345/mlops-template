@@ -40,6 +40,8 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: 22
         script: |
+          export REGISTRY="sudarshan889"
+          export IMAGE_TAG="latest"
           docker pull $REGISTRY/mlflow:$IMAGE_TAG
           docker stop mlflow || true
           docker rm mlflow || true
