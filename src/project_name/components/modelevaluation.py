@@ -7,15 +7,26 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import mlflow.pytorch
 import json
+import os
+from dotenv import load_dotenv
 
 class ModelEvaluation:
     def __init__(self, entity:modelevaluationentity):
         self.entity = entity
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        dotenv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env')
+        )
+        load_dotenv(dotenv_path=dotenv_path) 
+        self.tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+        self.model_name = os.getenv("MLFLOW_MODEL_NAME")
+        self.model_stage = os.getenv("MLFLOW_MODEL_STAGE")
+        mlflow.set_tracking_uri(self.tracking_uri)
 
     def evaluate(self):
    
-        model = mlflow.pytorch.load_model("models:/MLOPs Template/1")  # Version 1
+        model_uri = f"models:/{self.model_name}/{self.model_stage}"
+        model = mlflow.pytorch.load_model(model_uri=model_uri) 
         model.to(self.device)
         model.eval()
 

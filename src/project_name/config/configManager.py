@@ -29,7 +29,7 @@ class ConfigManager:
             data_type = config.data_type,
             raw_data_dirc= os.path.join(config.unzip_data_file,"Chicken-fecal-images"),
             transformed_data_dirc = Path(config.transformed_data_file),
-            image_size= config.image_size,
+            image_size= self.params.image_size,
         )
         return entity
     

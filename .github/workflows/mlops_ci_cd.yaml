@@ -1,59 +1,87 @@
-name: MLOPS CI/CD
+name: MLOps CI/CD Pipeline
 
-on: 
-  push: 
-    branches: 
-      - main
-  pull_request:
+on:
+  push:
     branches:
       - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ${{ secrets.DOCKER_USERNAME }}
+  IMAGE_TAG: latest
 
 jobs:
-  mlops_pipeline:
-    runs-on: ubuntu-latest  
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set Python Path
-        run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Reproduce pipeline
-        run: |
+    - name: Build & push MLflow
+      run: |
+        docker build -t $REGISTRY/mlflow:$IMAGE_TAG ./mlflow
+        docker push $REGISTRY/mlflow:$IMAGE_TAG
+
+
+    - name: Deploy MLflow on Azure VM
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZURE_VM_IP }}
+        username: ${{ secrets.AZURE_VM_USER }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        script: |
+          docker pull $REGISTRY/mlflow:$IMAGE_TAG
+          docker stop mlflow || true
+          docker rm mlflow || true
+          docker run -d \
+            --name mlflow \
+            -p 5000:5000 \
+            -v ~/mlruns:/mlruns \
+            -v ~/mlflow.db:/mlflow.db \
+            -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
+            -e MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlruns \
+            $REGISTRY/mlflow:$IMAGE_TAG
+
+
+    - name: Run DVC Repro
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZURE_VM_IP }}
+        username: ${{ secrets.AZURE_VM_USER }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        script: |
+          cd ~/mlops
+          export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
           dvc repro
 
 
+    - name: Build & push Flask API
+      run: |
+        docker build -t $REGISTRY/flask-api:$IMAGE_TAG ./api
+        docker push $REGISTRY/flask-api:$IMAGE_TAG
 
-  docker-deploy:
-    needs: mlops_pipeline
-    runs-on: ubuntu-latest  
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  
 
-      - name: Setup Docker builder
-        uses: docker/setup-buildx-action@v2  
+    - name: Build & push Streamlit
+      run: |
+        docker build -t $REGISTRY/streamlit:$IMAGE_TAG ./templates
+        docker push $REGISTRY/streamlit:$IMAGE_TAG
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2  
-        with: 
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v2  
-        with: 
-          context: .
-          file: Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mlops-template:latest
+    - name: Deploy Flask & Streamlit
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.AZURE_VM_IP }}
+        username: ${{ secrets.AZURE_VM_USER }}
+        key: ${{ secrets.AZURE_VM_SSH_KEY }}
+        script: |
+          cd ~/mlops
+          docker-compose pull
+          docker-compose up -d flask-api streamlit

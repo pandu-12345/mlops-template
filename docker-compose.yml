@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  mlflow:
+    build:
+      context: .
+      dockerfile: mlflow/dockerfile
+    container_name: mlflow
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlruns
+    volumes:
+      - ./mlruns:/mlruns
+      - ./mlflow.db:/mlflow.db
+
+  flask-api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: flask_api
+    ports:
+      - "8000:8000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - mlflow
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: templates/Dockerfile
+    container_name: streamlit_ui
+    ports:
+      - "8501:8501"
+    environment:
+      - FLASK_API_URL=http://flask-api:8000
+    depends_on:
+      - flask-api

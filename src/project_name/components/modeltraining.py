@@ -5,10 +5,19 @@ from torchvision import transforms,datasets,models
 from torch.utils.data import DataLoader
 import mlflow
 import mlflow.pytorch
+from dotenv import load_dotenv
+import os
 
 class ModelTraining:
     def __init__(self,trainingEntity:trainingEntity):
         self.entity = trainingEntity
+        dotenv_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env')
+        )
+        load_dotenv(dotenv_path=dotenv_path) 
+        self.mlflow_uri = os.getenv("MLFLOW_TRACKING_URI")
+        self.experiment_name = os.getenv("MLFLOW_EXPERIMENT_NAME")
+        self.registered_model_name = os.getenv("MLFLOW_REGISTERED_MODEL_NAME")
 
     def train(self):
         
@@ -29,45 +38,53 @@ class ModelTraining:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model.to(device)
 
-        model.train()
+        mlflow.set_tracking_uri(self.mlflow_uri)
+        mlflow.set_experiment(self.experiment_name)
 
-        mlflow.set_experiment("MLOPs Template")
-        for epoch in range(self.entity.epochs):
-            
-            mlflow.log_param("Batch_size",self.entity.batch_size)
-            mlflow.log_param("Learning rate", self.entity.learning_rate)
+        with mlflow.start_run():
+            # Log static parameters once
+            mlflow.log_param("Batch_size", self.entity.batch_size)
+            mlflow.log_param("Learning_rate", self.entity.learning_rate)
             mlflow.log_param("Epochs", self.entity.epochs)
-            mlflow.log_param("Image size", self.entity.image_size)
+            mlflow.log_param("Image_size", self.entity.image_size)
 
-            total_loss= 0.0
-            correct= 0
-            total= 0
+            model.train()
+            for epoch in range(self.entity.epochs):
+                total_loss = 0.0
+                correct = 0
+                total = 0
 
-            for images,labels in dataloader:
-                images, labels = images.to(device), labels.to(device)
-                optimizer.zero_grad()
-                outputs = model(images)
-                #print(outputs,labels)
-                loss= criterion(outputs,labels)
-                loss.backward()
-                optimizer.step()
-                total_loss+=loss.item()
-                _,predicted = torch.max(outputs, 1)
-                correct += (predicted == labels).sum().item()
-                total += labels.size(0)
+                for images, labels in dataloader:
+                    images, labels = images.to(device), labels.to(device)
 
-            acc = correct / total
-            print(f"Epoch {epoch+1}: Loss={total_loss:.4f}, Accuracy={acc:.4f}")
+                    optimizer.zero_grad()
+                    outputs = model(images)
+                    loss = criterion(outputs, labels)
+                    loss.backward()
+                    optimizer.step()
 
-            mlflow.log_metric("loss", total_loss, step=epoch)
-            mlflow.log_metric("accuracy", acc, step=epoch)
+                    total_loss += loss.item()
+                    _, predicted = torch.max(outputs, 1)
+                    correct += (predicted == labels).sum().item()
+                    total += labels.size(0)
 
-            print(f"Epoch {epoch+1}/{self.entity.epochs}, Loss: {total_loss:.4f}")
-        input_example = torch.rand(1, 3, 224, 224).to(device).cpu().numpy()
-        mlflow.pytorch.log_model(model, artifact_path="model",input_example= input_example,registered_model_name="MLOPs Template")
-        
-        class_to_idx = dataset.class_to_idx
-        mlflow.log_dict(class_to_idx, "class_to_idx.json")
+                accuracy = correct / total
+                print(f"Epoch {epoch+1}/{self.entity.epochs}, Loss: {total_loss:.4f}, Accuracy: {accuracy:.4f}")
 
-        torch.save(model.state_dict(),self.entity.model_dir)
-        print(f"Model saved to {self.entity.model_dir}")
+                mlflow.log_metric("Loss", total_loss, step=epoch)
+                mlflow.log_metric("Accuracy", accuracy, step=epoch)
+
+            # Save model to MLflow
+            input_example = torch.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1])
+            mlflow.pytorch.log_model(
+                model,
+                artifact_path="model",
+                input_example=input_example,
+                registered_model_name=self.registered_model_name
+            )
+
+            # Save class mapping
+            mlflow.log_dict(dataset.class_to_idx, "class_to_idx.json")
+
+            torch.save(model.state_dict(), self.entity.model_dir)
+            print(f"Model saved to {self.entity.model_dir}")
