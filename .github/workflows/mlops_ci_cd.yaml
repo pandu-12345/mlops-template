@@ -72,7 +72,7 @@ jobs:
           
           export PYTHONPATH=$PYTHONPATH:~/mlops
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
-          
+          export MLFLOW_EXPERIMENT_NAME="my_experiment"
 
           if [ ! -d ".venv" ]; then
             python3 -m venv .venv
