@@ -84,6 +84,8 @@ class ModelTraining:
                 raise TypeError(f"input_example must be torch.Tensor or numpy.ndarray, got {type(input_examples)}")
 
             # Log model to MLflow
+            print("DEBUG: input_example type is",type(input_examples))
+            print("DEBUG: code version marker v2")
             mlflow.pytorch.log_model(
                 model,
                 name="model", 
