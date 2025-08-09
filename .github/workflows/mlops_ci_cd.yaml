@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: ${{ secrets.DOCKER_USERNAME }}
+  REGISTRY: "sudarshan889"
   IMAGE_TAG: latest
 
 jobs:
@@ -28,6 +28,8 @@ jobs:
 
     - name: Build & push MLflow
       run: |
+        export REGISTRY="sudarshan889"
+        export IMAGE_TAG="latest"
         docker build -t $REGISTRY/mlflow:$IMAGE_TAG ./mlflow
         docker push $REGISTRY/mlflow:$IMAGE_TAG
 
