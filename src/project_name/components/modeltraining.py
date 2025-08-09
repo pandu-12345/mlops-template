@@ -77,10 +77,11 @@ class ModelTraining:
 
             # Save model to MLflow
             input_example = torch.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1])
+            input_example_np = np.random.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1]).astype(np.float32)
             mlflow.pytorch.log_model(
                 model,
                 artifact_path="model",
-                input_example=input_example.detach().cpu().numpy(),
+                input_example=input_example_np,
                 registered_model_name=self.registered_model_name
             )
 
