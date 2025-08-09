@@ -2,6 +2,7 @@ from ..entity.config_entity import trainingEntity
 import torch
 from torch import nn, optim
 from torchvision import transforms,datasets,models
+import numpy as np
 from torch.utils.data import DataLoader
 import mlflow
 import mlflow.pytorch
@@ -79,7 +80,7 @@ class ModelTraining:
             mlflow.pytorch.log_model(
                 model,
                 artifact_path="model",
-                input_example=input_example,
+                input_example=input_example.numpy(),
                 registered_model_name=self.registered_model_name
             )
 
