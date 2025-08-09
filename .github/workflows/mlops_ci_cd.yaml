@@ -33,10 +33,6 @@ jobs:
         docker build -t $REGISTRY/mlflow:$IMAGE_TAG ./mlflow
         docker push $REGISTRY/mlflow:$IMAGE_TAG
 
-    - name: show file
-      run: |
-        echo "=== modeltraining.py content in cicd ==="
-        grep -n "input_examples" /home/sudarshanuser/mlops/src/project_name/components/modeltraining.py 
 
     - name: Deploy MLflow on Azure VM
       uses: appleboy/ssh-action@master
