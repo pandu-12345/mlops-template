@@ -11,6 +11,7 @@ torchaudio
 mlflow
 fastapi
 uvicorn
+numpy
 #apache-airflow
 dvc
 streamlit

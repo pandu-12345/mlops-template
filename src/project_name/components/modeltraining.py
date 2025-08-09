@@ -80,7 +80,7 @@ class ModelTraining:
             mlflow.pytorch.log_model(
                 model,
                 artifact_path="model",
-                input_example=input_example.numpy(),
+                input_example=input_example.detach().cpu().numpy(),
                 registered_model_name=self.registered_model_name
             )
 
