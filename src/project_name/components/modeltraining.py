@@ -88,7 +88,7 @@ class ModelTraining:
             print("DEBUG: code version marker v2")
             mlflow.pytorch.log_model(
                 model,
-                name="model", 
+                artifact_path="model", 
                 input_example=input_examples.astype(np.float32),
                 registered_model_name=self.registered_model_name
             )
