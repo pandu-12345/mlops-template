@@ -75,15 +75,23 @@ class ModelTraining:
                 mlflow.log_metric("Loss", total_loss, step=epoch)
                 mlflow.log_metric("Accuracy", accuracy, step=epoch)
 
-            # Save model to MLflow
-            input_example = torch.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1])
-            input_example_np = np.random.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1]).astype(np.float32)
+
+
+            input_examples = torch.rand(1, 3, self.entity.image_size[0], self.entity.image_size[1])
+            if isinstance(input_examples, torch.Tensor):
+                input_examples = input_examples.detach().cpu().numpy()
+            elif not isinstance(input_examples, np.ndarray):
+                raise TypeError(f"input_example must be torch.Tensor or numpy.ndarray, got {type(input_examples)}")
+
+            # Log model to MLflow
             mlflow.pytorch.log_model(
                 model,
-                artifact_path="model",
-                input_example=input_example_np,
+                name="model", 
+                input_example=input_examples.astype(np.float32),
                 registered_model_name=self.registered_model_name
             )
+
+            
 
             # Save class mapping
             mlflow.log_dict(dataset.class_to_idx, "class_to_idx.json")
