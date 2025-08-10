@@ -17,3 +17,4 @@ dvc
 streamlit
 python-dotenv
 azure-storage-blob
+azure-identity
