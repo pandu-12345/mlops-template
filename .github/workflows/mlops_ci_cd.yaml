@@ -104,7 +104,7 @@ jobs:
           dvc remote add -d azure_remote azure://mlflowartifactsud.blob.core.windows.net/mlflow || true
           dvc remote modify azure_remote account_name $AZURE_STORAGE_ACCOUNT_NAME
           dvc remote modify azure_remote account_key $AZURE_STORAGE_ACCOUNT_KEY
-          dvc repro
+          dvc repro --force
 
 
     - name: Build & push Flask API
