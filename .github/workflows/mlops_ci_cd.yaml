@@ -77,6 +77,7 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:~/mlops
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
           export MLFLOW_EXPERIMENT_NAME="my_experiment"
+          export MLFLOW_MODEL_NAME="resnet18-model"
           export MLFLOW_ARTIFACT_URI=azure://mlflowartifactsud.blob.core.windows.net/mlflow
           export AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
           export AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
