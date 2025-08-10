@@ -18,7 +18,7 @@ class ModelTraining:
         load_dotenv(dotenv_path=dotenv_path) 
         self.mlflow_uri = os.getenv("MLFLOW_TRACKING_URI")
         self.experiment_name = os.getenv("MLFLOW_EXPERIMENT_NAME")
-        self.registered_model_name = os.getenv("MLFLOW_REGISTERED_MODEL_NAME")
+        self.registered_model_name = os.getenv("MLFLOW_MODEL_NAME")
 
     def train(self):
         
