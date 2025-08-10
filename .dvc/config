@@ -1,0 +1,2 @@
+['remote "myazure"']
+    url = azure://mlflowartifactsud.blob.core.windows.net/mlflow

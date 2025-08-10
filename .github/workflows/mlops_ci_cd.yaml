@@ -9,6 +9,9 @@ on:
 env:
   REGISTRY: "sudarshan889"
   IMAGE_TAG: latest
+  AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
 
 jobs:
   build-and-deploy:
@@ -54,7 +57,7 @@ jobs:
             -v $HOME/mlruns:/mlruns \
             -v $HOME/mlflow.db:/mlflow.db \
             -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
-            -e MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlruns \
+            -e MLFLOW_DEFAULT_ARTIFACT_ROOT= azure://mlflowartifactsud.blob.core.windows.net/mlflow \
             $REGISTRY/mlflow:$IMAGE_TAG
       
 
@@ -96,7 +99,10 @@ jobs:
           if nvidia-smi &> /dev/null; then
            pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
           fi
-
+          export MLFLOW_ARTIFACT_URI = azure://mlflowartifactsud.blob.core.windows.net/mlflow
+          export AZURE_TENANT_ID = ${{ secrets.AZURE_TENANT_ID }}
+          export AZURE_CLIENT_ID = ${{ secrets.AZURE_CLIENT_ID }}
+          export AZURE_CLIENT_SECRET = ${{ secrets.AZURE_CLIENT_SECRET }}
           dvc repro
 
 
