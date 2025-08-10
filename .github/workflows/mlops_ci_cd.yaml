@@ -109,7 +109,7 @@ jobs:
 
     - name: Build & push Flask API
       run: |
-        docker build -t $REGISTRY/flask-api:$IMAGE_TAG ./api
+        docker build -t $REGISTRY/flask-api:$IMAGE_TAG -f ./api/Dockerfile .
         docker push $REGISTRY/flask-api:$IMAGE_TAG
 
 
