@@ -58,6 +58,8 @@ jobs:
             -v $HOME/mlflow.db:/mlflow.db \
             -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
             -e MLFLOW_DEFAULT_ARTIFACT_ROOT= azure://mlflowartifactsud.blob.core.windows.net/mlflow \
+            -e AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+            -e AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
             $REGISTRY/mlflow:$IMAGE_TAG
       
 
@@ -83,6 +85,9 @@ jobs:
           export PYTHONPATH=$PYTHONPATH:~/mlops
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
           export MLFLOW_EXPERIMENT_NAME="my_experiment"
+          export MLFLOW_ARTIFACT_URI=azure://mlflowartifactsud.blob.core.windows.net/mlflow
+          export AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+          export AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
 
           if [ ! -d ".venv" ]; then
             python3 -m venv .venv
@@ -99,10 +104,13 @@ jobs:
           if nvidia-smi &> /dev/null; then
            pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
           fi
-          export MLFLOW_ARTIFACT_URI = azure://mlflowartifactsud.blob.core.windows.net/mlflow
-          export AZURE_TENANT_ID = ${{ secrets.AZURE_TENANT_ID }}
-          export AZURE_CLIENT_ID = ${{ secrets.AZURE_CLIENT_ID }}
-          export AZURE_CLIENT_SECRET = ${{ secrets.AZURE_CLIENT_SECRET }}
+          
+          export AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}
+          export AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}
+          export AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}
+          dvc remote add -d azure_remote azure://mlflowartifactsud.blob.core.windows.net/mlflow || true
+          dvc remote modify azure_remote account_name $AZURE_STORAGE_ACCOUNT_NAME
+          dvc remote modify azure_remote account_key $AZURE_STORAGE_ACCOUNT_KEY
           dvc repro
 
 
