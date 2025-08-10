@@ -75,6 +75,10 @@ jobs:
         script: |
           if [ ! -d ~/mlops ]; then
             git clone https://github.com/pandu-12345/mlops-template.git ~/mlops
+          else
+            cd ~/mlops
+            git fetch --all
+            git reset --hard origin/main
           fi
           
           cd ~/mlops
