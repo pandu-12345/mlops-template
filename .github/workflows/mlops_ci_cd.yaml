@@ -26,13 +26,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     
-    - name: Show modeltraining.py content in CI/CD
-      run: |
-        echo "=== modeltraining.py content in CI/CD ==="
-        grep -n "input_example" ./mlops/src/project_name/components/modeltraining.py || echo "No match found"
-        echo "=== First 20 lines ==="
-        head -n 20 ./mlops/src/project_name/components/modeltraining.py
-
+    
     - name: Build & push MLflow
       run: |
         export REGISTRY="sudarshan889"
