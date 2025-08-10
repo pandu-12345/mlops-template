@@ -20,12 +20,11 @@ class ModelEvaluation:
         load_dotenv(dotenv_path=dotenv_path) 
         self.tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
         self.model_name = os.getenv("MLFLOW_MODEL_NAME")
-        self.model_stage = os.getenv("MLFLOW_MODEL_STAGE")
         mlflow.set_tracking_uri(self.tracking_uri)
 
     def evaluate(self):
    
-        model_uri = f"models:/{self.model_name}/{self.model_stage}"
+        model_uri = f"models:/{self.model_name}"
         model = mlflow.pytorch.load_model(model_uri=model_uri) 
         model.to(self.device)
         model.eval()
