@@ -57,7 +57,7 @@ jobs:
             -v $HOME/mlruns:/mlruns \
             -v $HOME/mlflow.db:/mlflow.db \
             -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db \
-            -e MLFLOW_DEFAULT_ARTIFACT_ROOT= azure://mlflowartifactsud.blob.core.windows.net/mlflow \
+            -e MLFLOW_DEFAULT_ARTIFACT_ROOT=azure://mlflowartifactsud.blob.core.windows.net/mlflow \
             -e AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
             -e AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
             $REGISTRY/mlflow:$IMAGE_TAG
