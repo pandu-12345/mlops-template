@@ -51,7 +51,7 @@ jobs:
           docker pull $REGISTRY/mlflow:$IMAGE_TAG
           docker stop mlflow || true
           docker rm mlflow || true
-          docker run -d --name mlflow -p 5000:5000 -v $HOME/mlruns:/mlruns -v $HOME/mlflow.db:/mlflow.db -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db -e MLFLOW_DEFAULT_ARTIFACT_ROOT=azure://mlflowartifactsud.blob.core.windows.net/mlflow -e AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} -e AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} $REGISTRY/mlflow:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name mlflow -p 5000:5000 -v $HOME/mlruns:/mlruns -v $HOME/mlflow.db:/mlflow.db -e MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db -e MLFLOW_DEFAULT_ARTIFACT_ROOT=azure://mlflowartifactsud.blob.core.windows.net/mlflow -e AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} -e AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} $REGISTRY/mlflow:$IMAGE_TAG
           
       
 
@@ -137,6 +137,6 @@ jobs:
           docker pull $REGISTRY/flask-api:$IMAGE_TAG
           docker pull $REGISTRY/streamlit:$IMAGE_TAG
 
-          docker run -d --name flask-api -p 8000:8000 $REGISTRY/flask-api:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 $REGISTRY/flask-api:$IMAGE_TAG
 
-          docker run -d --name streamlit -p 8501:8501 $REGISTRY/streamlit:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name streamlit -p 8501:8501 $REGISTRY/streamlit:$IMAGE_TAG
