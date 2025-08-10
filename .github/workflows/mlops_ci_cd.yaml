@@ -126,6 +126,17 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: 22
         script: |
+          export REGISTRY="sudarshan889"
+          export IMAGE_TAG="latest"
           cd ~/mlops
-          docker-compose pull
-          docker-compose up -d flask-api streamlit
+          docker stop flask-api || true
+          docker rm flask-api || true
+          docker stop streamlit || true
+          docker rm streamlit || true
+          
+          docker pull $REGISTRY/flask-api:$IMAGE_TAG
+          docker pull $REGISTRY/streamlit:$IMAGE_TAG
+
+          docker run -d --name flask-api -p 8000:8000 $REGISTRY/flask-api:$IMAGE_TAG
+
+          docker run -d --name streamlit -p 8501:8501 $REGISTRY/streamlit:$IMAGE_TAG
