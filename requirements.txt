@@ -16,3 +16,4 @@ numpy
 dvc
 streamlit
 python-dotenv
+azure-storage-blob
