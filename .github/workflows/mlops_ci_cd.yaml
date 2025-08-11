@@ -147,6 +147,9 @@ jobs:
         key: ${{ secrets.AZURE_VM_SSH_KEY }}
         port: 22
         script: |
+          AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}
+          export AZURE_CLIENT_ID={{ secrets.AZURE_CLIENT_ID }}
+          export AZURE_CLIENT_SECRET={{ secrets.AZURE_CLIENT_SECRET }}
           export REGISTRY="sudarshan889"
           export IMAGE_TAG="latest"
           cd ~/mlops
@@ -155,4 +158,4 @@ jobs:
           docker system prune -f --volumes || true
           docker pull $REGISTRY/flask-api:$IMAGE_TAG
 
-          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 -e MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000 -e MLFLOW_MODEL_NAME="resnet18-model" -e MLFLOW_MODEL_STAGE="production" $REGISTRY/flask-api:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 -e MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000 -e MLFLOW_MODEL_NAME="resnet18-model" -e MLFLOW_MODEL_STAGE="production" -e AZURE_TENANT_ID=${{ secrets.AZURE_TENANT_ID }} -e AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }} -e AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }} $REGISTRY/flask-api:$IMAGE_TAG
