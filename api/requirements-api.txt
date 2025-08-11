@@ -10,3 +10,4 @@ uvicorn
 python-dotenv
 azure-storage-blob
 azure-identity
+python-multipart
