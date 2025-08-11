@@ -12,8 +12,6 @@ setup(
         "torch",
         "flask",
         "mlflow",
-        "apache-airflow",
-        # add other dependencies here
     ],
     entry_points={
         "console_scripts": [
