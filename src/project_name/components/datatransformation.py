@@ -34,7 +34,7 @@ class DataTransformation:
                         label_map.append(
                             {"path": str(save_path), "label": file.name}
                         )
-                        print({"path": str(save_path), "label": file.name})
+
                     except Exception as e:
                         print(f"fail to process imgae {image_file.name} : {e}")
         else:

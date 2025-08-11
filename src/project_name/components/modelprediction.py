@@ -30,7 +30,7 @@ class Prediction:
         
         # Set MLflow tracking URI and load model
         mlflow.set_tracking_uri(tracking_uri)
-        self.model = mlflow.pytorch.load_model(model_uri=f"models:/{model_name}/{model_stage}")
+        self.model = mlflow.pytorch.load_model(model_uri=f"models:/{model_name}@{model_stage}")
         self.model.to(self.device)
         self.model.eval()
 

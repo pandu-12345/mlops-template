@@ -25,7 +25,7 @@ class ModelEvaluation:
 
     def evaluate(self):
    
-        model_uri = f"models:/{self.model_name}/{self.model_stage}"
+        model_uri = f"models:/{self.model_name}@{self.model_stage}"
         model = mlflow.pytorch.load_model(model_uri=model_uri) 
         model.to(self.device)
         model.eval()
