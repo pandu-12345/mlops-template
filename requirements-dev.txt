@@ -1,5 +1,7 @@
 python-box
 pyyaml
+types-pyyaml
+pillow
 torch 
 torchvision 
 mlflow
@@ -7,6 +9,8 @@ fastapi
 uvicorn
 numpy
 dvc
+streamlit
 python-dotenv
 azure-storage-blob
 azure-identity
+notebook

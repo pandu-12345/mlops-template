@@ -1,10 +1,9 @@
 FROM python:3.12-slim
 
 WORKDIR /app
-
-COPY home.py .
-
-RUN pip install streamlit mlflow requests pillow
+COPY requirements-ui.txt .
+RUN pip install --no-cache-dir -r requirements-ui.txt
+COPY . .
 
 
 EXPOSE 8501

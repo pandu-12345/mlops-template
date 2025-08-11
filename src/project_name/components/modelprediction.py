@@ -4,13 +4,14 @@ from ..Utills.utills import read_yaml
 from ..contants import CONFIG_FILE_PATH, PARAMS_FILE_PATH
 from PIL import Image
 import torch
-from pathlib import Path
 from torchvision import transforms
 import os
 from dotenv import load_dotenv
+
 dotenv_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..', '.env')
 )
+
 load_dotenv(dotenv_path=dotenv_path) 
 
 class Prediction:
