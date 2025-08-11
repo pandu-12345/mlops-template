@@ -11,7 +11,8 @@ RUN pip install --no-cache-dir -r requirements-api.txt --target=/install
 FROM python:3.12-slim
 
 WORKDIR /app
-
+COPY ./project_name /app/project_name
+COPY ./api /app/api
 ENV PYTHONPATH=/app
 
 COPY --from=builder /install /usr/local/lib/python3.12/site-packages/
