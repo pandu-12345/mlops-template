@@ -5,6 +5,7 @@ from torchvision import transforms,datasets,models
 import numpy as np
 from torch.utils.data import DataLoader
 import mlflow
+from mlflow import MlflowClient
 import mlflow.pytorch
 from dotenv import load_dotenv
 import os
@@ -19,6 +20,7 @@ class ModelTraining:
         self.mlflow_uri = os.getenv("MLFLOW_TRACKING_URI")
         self.experiment_name = os.getenv("MLFLOW_EXPERIMENT_NAME")
         self.registered_model_name = os.getenv("MLFLOW_MODEL_NAME")
+        self.model_stage = os.getenv("MLFLOW_MODEL_STAGE","production")
 
     def train(self):
         
@@ -86,7 +88,7 @@ class ModelTraining:
             # Log model to MLflow
             print("DEBUG: input_example type is",type(input_examples))
             print("DEBUG: code version marker v2")
-            mlflow.pytorch.log_model(
+            logged_model_info = mlflow.pytorch.log_model(
                 model,
                 artifact_path="model", 
                 input_example=input_examples.astype(np.float32),
@@ -94,6 +96,12 @@ class ModelTraining:
             )
 
             
+            client = MlflowClient()
+            client.set_registered_model_alias(
+                name=self.registered_model_name,
+                alias=self.model_stage,
+                version=logged_model_info.version
+            )
 
             # Save class mapping
             mlflow.log_dict(dataset.class_to_idx, "class_to_idx.json")

@@ -81,6 +81,7 @@ jobs:
           export MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000
           export MLFLOW_EXPERIMENT_NAME="my_experiment"
           export MLFLOW_MODEL_NAME="resnet18-model"
+          export MLFLOW_MODEL_STAGE="production"
           export MLFLOW_ARTIFACT_URI=azure://mlflowartifactsud.blob.core.windows.net/mlflow
           export AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
           export AZURE_STORAGE_ACCOUNT_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
@@ -154,4 +155,4 @@ jobs:
           docker system prune -f --volumes || true
           docker pull $REGISTRY/flask-api:$IMAGE_TAG
 
-          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 -e MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000 -e MLFLOW_MODEL_NAME="resnet18-model" -e MLFLOW_MODEL_STAGE="Production" $REGISTRY/flask-api:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 -e MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000 -e MLFLOW_MODEL_NAME="resnet18-model" -e MLFLOW_MODEL_STAGE="production" $REGISTRY/flask-api:$IMAGE_TAG

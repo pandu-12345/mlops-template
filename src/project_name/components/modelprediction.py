@@ -22,7 +22,7 @@ class Prediction:
         
         tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
         model_name = os.getenv("MLFLOW_MODEL_NAME")
-        model_stage = os.getenv("MLFLOW_MODEL_STAGE","Production")
+        model_stage = os.getenv("MLFLOW_MODEL_STAGE","production")
 
 
         if not all([tracking_uri, model_name, model_stage]):
