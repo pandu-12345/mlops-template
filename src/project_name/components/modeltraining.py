@@ -97,12 +97,12 @@ class ModelTraining:
 
             
             client = MlflowClient()
+            latest_version = client.search_model_versions(f"name='{self.registered_model_name}'")[-1].version
             client.set_registered_model_alias(
                 name=self.registered_model_name,
-                alias=self.model_stage,
-                version=logged_model_info.version
+                alias="production",
+                version=latest_version
             )
-
             # Save class mapping
             mlflow.log_dict(dataset.class_to_idx, "class_to_idx.json")
 
