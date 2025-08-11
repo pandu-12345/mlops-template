@@ -17,6 +17,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY --from=builder /install /usr/local/lib/python3.12/site-packages/
+COPY --from=builder /install/bin /usr/local/bin/
 
 COPY . .
 
