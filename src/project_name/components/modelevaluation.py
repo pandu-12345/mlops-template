@@ -20,7 +20,7 @@ class ModelEvaluation:
         load_dotenv(dotenv_path=dotenv_path) 
         self.tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
         self.model_name = os.getenv("MLFLOW_MODEL_NAME")
-        self.model_stage = os.getenv("MLFLOW_MODEL_STAGE")
+        self.model_stage = os.getenv("MLFLOW_MODEL_STAGE","production")
         mlflow.set_tracking_uri(self.tracking_uri)
 
     def evaluate(self):

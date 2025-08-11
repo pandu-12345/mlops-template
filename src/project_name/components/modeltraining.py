@@ -88,7 +88,7 @@ class ModelTraining:
             # Log model to MLflow
             print("DEBUG: input_example type is",type(input_examples))
             print("DEBUG: code version marker v2")
-            logged_model_info = mlflow.pytorch.log_model(
+            mlflow.pytorch.log_model(
                 model,
                 artifact_path="model", 
                 input_example=input_examples.astype(np.float32),
@@ -100,7 +100,7 @@ class ModelTraining:
             latest_version = client.search_model_versions(f"name='{self.registered_model_name}'")[-1].version
             client.set_registered_model_alias(
                 name=self.registered_model_name,
-                alias="production",
+                alias=self.model_stage,
                 version=latest_version
             )
             # Save class mapping
