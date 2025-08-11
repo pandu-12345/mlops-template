@@ -154,4 +154,4 @@ jobs:
           docker system prune -f --volumes || true
           docker pull $REGISTRY/flask-api:$IMAGE_TAG
 
-          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 $REGISTRY/flask-api:$IMAGE_TAG
+          docker run -d --restart unless-stopped --name flask-api -p 8000:8000 -e MLFLOW_TRACKING_URI=http://${{ secrets.AZURE_VM_IP }}:5000 -e MLFLOW_MODEL_NAME="resnet18-model" -e MLFLOW_MODEL_STAGE="Production" $REGISTRY/flask-api:$IMAGE_TAG
